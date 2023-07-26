@@ -790,7 +790,7 @@ smtp:
 sidecar:
   image:
     repository: quay.io/kiwigrid/k8s-sidecar
-    tag: 1.24.3
+    tag: 1.24.6
     sha: ""
   imagePullPolicy: IfNotPresent
   resources: {}
@@ -850,6 +850,8 @@ sidecar:
     script: null
     skipReload: false
     # Deploy the alert sidecar as an initContainer in addition to a container.
+    # Additional alert sidecar volume mounts
+    extraMounts: []
     # Sets the size limit of the alert sidecar emptyDir volume
     sizeLimit: {}
   dashboards:
