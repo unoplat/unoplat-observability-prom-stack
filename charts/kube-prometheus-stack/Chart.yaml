@@ -11,7 +11,6 @@ appVersion: v0.66.0
 dependencies:
 - condition: crds.enabled
   name: crds
-  repository: ""
   version: 0.0.0
 - condition: kubeStateMetrics.enabled
   name: kube-state-metrics
@@ -60,4 +59,4 @@ sources:
 - https://github.com/prometheus-community/helm-charts
 - https://github.com/prometheus-operator/kube-prometheus
 type: application
-version: 48.1.0
+version: 48.2.0-dev
