@@ -714,7 +714,7 @@ alertmanager:
     resources:
       requests:
         memory: "100Mi"
-        cpu: "100m"
+        cpu: "200m"
       limits:
         memory: "500Mi"
         cpu: "600m"
