@@ -43,5 +43,5 @@ jobs:
 
     - name: Install latest pre-release version
       run: |
-        version=$(helm search repo unoplat-observability-prom-stack/unoplat-observability-prom-stack --versions --devel --output json | jq -r '.[0].version')
-        helm upgrade --install unoplat-observability-prom-stack --namespace unoplat-observability unoplat-observability-prom-stack/unoplat-observability-prom-stack --version $version --devel --create-namespace 
+        version=$(helm search repo unoplat-observability-prom-stack/kube-prometheus-stack --versions --devel --output json | jq -r '.[0].version')
+        helm upgrade --install unoplat-observability-prom-stack --namespace unoplat-observability unoplat-observability-prom-stack/kube-prometheus-stack --version $version --devel --create-namespace 
