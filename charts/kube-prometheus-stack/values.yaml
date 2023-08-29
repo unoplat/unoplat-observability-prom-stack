@@ -1895,6 +1895,8 @@ prometheus-node-exporter:
     - --collector.filesystem.fs-types-exclude=^(autofs|binfmt_misc|bpf|cgroup2?|configfs|debugfs|devpts|devtmpfs|fusectl|hugetlbfs|iso9660|mqueue|nsfs|overlay|proc|procfs|pstore|rpc_pipefs|securityfs|selinuxfs|squashfs|sysfs|tracefs)$
   service:
     portName: http-metrics
+    port: 9200
+    targetPort: 9200
   prometheus:
     monitor:
       enabled: true
@@ -2230,7 +2232,7 @@ prometheusOperator:
       cpu: 1000m
       memory: 400Mi
     requests:
-      cpu: 100m
+      cpu: 200m
       memory: 100Mi
 
   # Required for use in managed kubernetes clusters (such as AWS EKS) with custom CNI (such as calico),
