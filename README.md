@@ -13,3 +13,22 @@
 
 - The Prometheus changelog suggests resource allocation for a development environment, with requests for 200Mi memory and 200m CPU, and limits for 1Gi memory and 1 CPU.
 - The **`storageSpec`** configuration for Prometheus is set to use a Persistent Volume Claim (PVC) with the `civo-volume`. The PVC requests a storage size of 5Gi and has an access mode of ReadWriteOnce.
+
+
+### Add Helm Repo
+
+helm repo add unoplat-observability-prom-stack https://unoplat.github.io/unoplat-observability-prom-stack 
+helm repo update
+
+### Install on Local Kubernetes
+
+```
+helm upgrade --install unoplat-observability-prom-stack --namespace unoplat-observability unoplat-observability-prom-stack/kube-prometheus-stack --version $version --devel --create-namespace --set prometheus.prometheusSpec.storageSpec.volumeClaimTemplate.spec.storageClassName=local-path --set alertmanager.alertmanagerSpec.storage.volumeClaimTemplate.spec.storageClassName=local-path
+```
+
+### Install on Civo Cloud 
+
+```
+helm upgrade --install unoplat-observability-prom-stack --namespace unoplat-observability unoplat-observability-prom-stack/kube-prometheus-stack --version $version --devel --create-namespace
+```
+
