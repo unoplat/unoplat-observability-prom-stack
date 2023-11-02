@@ -28,11 +28,6 @@ commonLabels: {}
 # scmhash: abc123
 # myLabel: aakkmd
 
-## Install Prometheus Operator CRDs
-##
-crds:
-  enabled: true
-
 ## Create default rules for monitoring the cluster
 ##
 defaultRules:
@@ -65,7 +60,6 @@ defaultRules:
     nodeExporterRecording: true
     prometheus: true
     prometheusOperator: true
-    windows: true
 
   ## Reduce app namespace alert scope
   appNamespacesTarget: ".*"
@@ -200,12 +194,6 @@ global:
   # or
   # - "image-pull-secret"
 
-windowsMonitoring:
-  ## Deploys the windows-exporter and Windows-specific dashboards and rules
-  enabled: false
-  ## Job must match jobLabel in the PodMonitor/ServiceMonitor and is used for the rules
-  job: prometheus-windows-exporter
-
 ## Configuration for alertmanager
 ## ref: https://prometheus.io/docs/alerting/alertmanager/
 ##
@@ -238,7 +226,7 @@ alertmanager:
   ## https://github.com/kubernetes/kubernetes/issues/45398
   ##
   podDisruptionBudget:
-    enabled: true
+    enabled: false
     minAvailable: 1
     maxUnavailable: ""
 
@@ -667,20 +655,20 @@ alertmanager:
     ## Time duration Alertmanager shall retain data for. Default is '120h', and must match the regular expression
     ## [0-9]+(ms|s|m|h) (milliseconds seconds minutes hours).
     ##
-    retention: 48h
+    retention: 120h
 
     ## Storage is the definition of how storage will be used by the Alertmanager instances.
     ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/user-guides/storage.md
     ##
-    storage: 
-      volumeClaimTemplate:
-        spec:
-          storageClassName: civo-volume
-          accessModes: ["ReadWriteOnce"]
-          resources:
-            requests:
-              storage: 5Gi
-          
+    storage: {}
+    # volumeClaimTemplate:
+    #   spec:
+    #     storageClassName: gluster
+    #     accessModes: ["ReadWriteOnce"]
+    #     resources:
+    #       requests:
+    #         storage: 50Gi
+    #     selector: {}
 
 
     ## The external URL the Alertmanager instances will be available under. This is necessary to generate correct URLs. This is necessary if Alertmanager is not served from root of a DNS name. string  false
@@ -711,13 +699,9 @@ alertmanager:
     ## Define resources requests and limits for single Pods.
     ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
     ##
-    resources:
-      requests:
-        memory: "100Mi"
-        cpu: "200m"
-      limits:
-        memory: "500Mi"
-        cpu: "600m"
+    resources: {}
+    # requests:
+    #   memory: 400Mi
 
     ## Pod anti-affinity can prevent the scheduler from placing Prometheus replicas on the same node.
     ## The default value "soft" means that the scheduler should *prefer* to not schedule two replica pods onto the same node but no guarantee is provided.
@@ -999,7 +983,7 @@ grafana:
   additionalDataSources: 
     - name: unoplat-loki
       type: loki
-      url: http://unoplat-observability-loki-stack.unoplat-observability:3100
+      url: http://unoplat-loki-stack.unoplat-observability:3100
       access: proxy
       version: 1
       isDefault: false
@@ -1960,7 +1944,7 @@ prometheus-node-exporter:
 
 ## Manages Prometheus and Alertmanager components
 ##
-prometheusOperator:  
+prometheusOperator:
   enabled: true
 
   ## Prometheus-Operator v0.39.0 and later support TLS natively.
@@ -2225,13 +2209,13 @@ prometheusOperator:
 
   ## Resource limits & requests
   ##
-  resources: 
-    limits:
-      cpu: 1000m
-      memory: 400Mi
-    requests:
-      cpu: 100m
-      memory: 100Mi
+  resources: {}
+  # limits:
+  #   cpu: 200m
+  #   memory: 200Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 100Mi
 
   # Required for use in managed kubernetes clusters (such as AWS EKS) with custom CNI (such as calico),
   # because control-plane managed by AWS cannot communicate with pods' IP CIDR and admission webhooks are not working
@@ -2296,17 +2280,8 @@ prometheusOperator:
   # Enable vertical pod autoscaler support for prometheus-operator
   verticalPodAutoscaler:
     enabled: false
-
-    # Recommender responsible for generating recommendation for the object.
-    # List should be empty (then the default recommender will generate the recommendation)
-    # or contain exactly one recommender.
-    # recommenders:
-    # - name: custom-recommender-performance
-
     # List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory
     controlledResources: []
-    # Specifies which resource values should be controlled: RequestsOnly or RequestsAndLimits.
-    # controlledValues: RequestsAndLimits
 
     # Define the max allowed resources for the pod
     maxAllowed: {}
@@ -2318,8 +2293,6 @@ prometheusOperator:
     # memory: 100Mi
 
     updatePolicy:
-      # Specifies minimal number of replicas which need to be alive for VPA Updater to attempt pod eviction
-      # minReplicas: 1
       # Specifies whether recommended updates are applied when a Pod is started and whether recommended updates
       # are applied during the life of a Pod. Possible values are "Off", "Initial", "Recreate", and "Auto".
       updateMode: Auto
@@ -2399,12 +2372,6 @@ prometheusOperator:
 ##
 prometheus:
   enabled: true
-
-  ## Toggle prometheus into agent mode
-  ## Note many of features described below (e.g. rules, query, alerting, remote read, thanos) will not work in agent mode.
-  ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/designs/prometheus-agent.md
-  ##
-  agentMode: false
 
   ## Annotations for Prometheus
   ##
@@ -2886,7 +2853,7 @@ prometheus:
     image:
       registry: quay.io
       repository: prometheus/prometheus
-      tag: v2.45.0
+      tag: v2.44.0
       sha: ""
 
     ## Tolerations for use with node taints
@@ -3097,7 +3064,7 @@ prometheus:
 
     ## How long to retain metrics
     ##
-    retention: 2d
+    retention: 10d
 
     ## Maximum size of metrics
     ##
@@ -3195,25 +3162,24 @@ prometheus:
 
     ## Resource limits & requests
     ##
-    resources: 
-      requests:
-        memory: "200Mi"
-        cpu: "200m"
-      limits:
-        memory: "1Gi"
-        cpu: "1"
+    resources: {}
+    # requests:
+    #   memory: 400Mi
 
     ## Prometheus StorageSpec for persistent data
     ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/user-guides/storage.md
     ##
-    storageSpec: 
-      volumeClaimTemplate:
-        spec:
-          storageClassName: civo-volume
-          accessModes: ["ReadWriteOnce"]
-          resources:
-            requests:
-              storage: 5Gi
+    storageSpec: {}
+    ## Using PersistentVolumeClaim
+    ##
+    #  volumeClaimTemplate:
+    #    spec:
+    #      storageClassName: gluster
+    #      accessModes: ["ReadWriteOnce"]
+    #      resources:
+    #        requests:
+    #          storage: 50Gi
+    #    selector: {}
 
     ## Using tmpfs volume
     ##
@@ -3478,10 +3444,6 @@ prometheus:
     #    hostnames:
     #      - a1.app.local
     #      - b1.app.local
-
-    ## TracingConfig configures tracing in Prometheus.
-    ## See https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#prometheustracingconfig
-    tracingConfig: {}
 
   additionalRulesForClusterRole: []
   #  - apiGroups: [ "" ]
