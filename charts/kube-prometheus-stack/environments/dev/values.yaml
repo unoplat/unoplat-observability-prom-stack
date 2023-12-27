@@ -275,13 +275,16 @@ alertmanager:
       group_wait: 30s
       group_interval: 5m
       repeat_interval: 12h
-      receiver: 'null'
+      receiver: 'discord-webhook'
       routes:
       - receiver: 'null'
         matchers:
           - alertname =~ "InfoInhibitor|Watchdog"
     receivers:
-    - name: 'null'
+      - name: 'discord-webhook'
+        webhook_configs:
+          - url: 'https://discord.com/api/webhooks/1189464833301684316/4TiVlF6ZtZpUU_0wii6redAHXo1XBDsM3fqzupa5tKSCM8GJ2qR6fDT0wJ3dNH3OBS4j'
+            send_resolved: true
     templates:
     - '/etc/alertmanager/config/*.tmpl'
 
