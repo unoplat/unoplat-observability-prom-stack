@@ -1,34 +1,35 @@
-### AlertManager Changelog
+### Scope
+- Support Monitoring and Alerting for Unoplat ecosystem.
+- DevSecOps
+  - Container NIST Scan
+  - Helm 
 
-- Set Pod Disruption Budget to minimum 1 pod
-- Reduced storage of alerts to 48h for dev
-- VolumeClaimTemplate specification that requests a persistent volume of 5 gigabytes with a storage class name of `civo-volume` and access mode of "ReadWriteOnce".
-- AlertManager resources adjusted with requests for 100Mi memory and 100m CPU, and limits for 500Mi memory and 500m CPU.
-
-### PrometheusOperator Changelog
-
-- Resources: Adjusted to meet the requirements of a dev environment. `resources: limits: cpu: 1000m memory: 400Mi requests: cpu: 100m memory: 100Mi`
-
-### Prometheus Changelog
-
-- The Prometheus changelog suggests resource allocation for a development environment, with requests for 200Mi memory and 200m CPU, and limits for 1Gi memory and 1 CPU.
-- The **`storageSpec`** configuration for Prometheus is set to use a Persistent Volume Claim (PVC) with the `civo-volume`. The PVC requests a storage size of 5Gi and has an access mode of ReadWriteOnce.
+### Current Progress
+- Alerting for Kubernetes based on https://runbooks.prometheus-operator.dev/runbooks.
+- 
 
 
-### Add Helm Repo
+
+### Installation Instructions
+
+#### Add Helm Repo
 
 helm repo add unoplat-observability-prom-stack https://unoplat.github.io/unoplat-observability-prom-stack 
 helm repo update
 
-### Install on Local Kubernetes
+#### Install on Local Kubernetes
 
 ```
 helm upgrade --install unoplat-observability-prom-stack --namespace unoplat-observability unoplat-observability-prom-stack/kube-prometheus-stack --version $version --devel --create-namespace --set prometheus.prometheusSpec.storageSpec.volumeClaimTemplate.spec.storageClassName=local-path --set alertmanager.alertmanagerSpec.storage.volumeClaimTemplate.spec.storageClassName=local-path
 ```
 
-### Install on Civo Cloud 
+#### Install on Civo Cloud 
 
 ```
 helm upgrade --install unoplat-observability-prom-stack --namespace unoplat-observability unoplat-observability-prom-stack/kube-prometheus-stack --version $version --devel --create-namespace
 ```
 
+### Credits
+## Base Open Source Projects
+- https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack
+- https://github.com/prometheus-operator/kube-prometheus
