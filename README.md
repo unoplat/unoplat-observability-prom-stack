@@ -1,10 +1,10 @@
 ### Scope
 
 #### Features
-- Easy Discord/Slack Webhook Configuration Support.
+- Easy Discord/Slack/Email Webhook Configuration Support.
 - Easy retention period configuration support.
 - Alerting for Kubernetes based on https://runbooks.prometheus-operator.dev/runbooks.
-- All default Grafana Dashboards related  to kubernetes and observability components of kube prometheus stack.
+- All default Grafana Dashboards related  to kubernetes and observability components of kube prometheus stack. These dashboards are coming from upstream projecs like kubernetes-mixin, prometheus-mixin and node-exporter-mixin.
 - Configurable Performance Benchmarking for Prometheus
 - High Available Alert Manager , Prometheus and Grafana
 - PVC Backup and Recovery for Disaster Management
@@ -26,6 +26,7 @@
 - Alerting for Kubernetes based on https://runbooks.prometheus-operator.dev/runbooks
 - All default Grafana Dashboards related  to kubernetes and observability components of kube prometheus stack.
 - Civo Storage class support.
+- All default Grafana Dashboards related  to kubernetes and observability components of kube prometheus stack. These dashboards are coming from upstream projecs like kubernetes-mixin, prometheus-mixin and node-exporter-mixin.
 
 #### DevSecOps
 - Helm Chart Security Scan powered by Kubescape (refer -> https://github.com/kubescape/kubescape to understand what is convered in those scans) (Clusters not scanned currently)
