@@ -56,7 +56,7 @@ jobs:
     - name: Extract Chart Version
       id: chart_version
       run: |
-        VERSION=$(grep 'version:' charts/kube-prometheus-stack/Chart.yaml | cut -d ' ' -f 2)
+        VERSION=$(grep 'version:' charts/kube-prometheus-stack/Chart.yaml | tail -n 1 | sed -e 's/^[[:space:]]*//' | cut -d ' ' -f 2 | grep -v '^$')
         echo "VERSION=v$VERSION" >> $GITHUB_ENV
 
     - name: Generate Changelog
