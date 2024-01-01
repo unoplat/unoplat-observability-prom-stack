@@ -277,7 +277,7 @@ alertmanager:
       repeat_interval: 12h
       receiver: 'discord-webhook'
       routes:
-      - receiver: 'null'
+      - receiver: 'discord-webhook'
         matchers:
           - alertname =~ "InfoInhibitor|Watchdog"
     receivers:
@@ -984,7 +984,7 @@ grafana:
       alertmanager:
         enabled: true
         uid: alertmanager
-        handleGrafanaManagedAlerts: false
+        handleGrafanaManagedAlerts: true
         implementation: prometheus
 
   extraConfigmapMounts: []
